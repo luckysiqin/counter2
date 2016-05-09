@@ -9,109 +9,90 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-
-    @IBOutlet weak var oneagriculture: UILabel!
-    @IBOutlet weak var twoagriculture: UILabel!
-    @IBOutlet weak var threeagriculture: UILabel!
     
-
-    @IBAction func oneadd(sender: AnyObject) {
-        var a:Int32=0
-        var b:Int32=0
-        var c:Int32=0
-        if(!oneagriculture.text!.isEmpty){
-            a=(oneagriculture.text! as NSString).intValue
-        }
-        if(!agriculturescore.text!.isEmpty){
-            b=(agriculturescore.text! as NSString).intValue
-        }
-        c=a+b
-        agriculturescore.text="\(c)"
-    }
-  
-    @IBAction func twoadd(sender: AnyObject) {
-        var a:Int32=0
-        var b:Int32=0
-        var c:Int32=0
-        if(!twoagriculture.text!.isEmpty){
-            a=(twoagriculture.text! as NSString).intValue
-        }
-        if(!agriculturescore.text!.isEmpty){
-            b=(agriculturescore.text! as NSString).intValue
-        }
-        c=a+b
-        agriculturescore.text="\(c)"
-    }
-    @IBAction func threeadd(sender: AnyObject) {
-        var a:Int32=0
-        var b:Int32=0
-        var c:Int32=0
-        if(!threeagriculture.text!.isEmpty){
-            a=(threeagriculture.text! as NSString).intValue
-        }
-        if(!agriculturescore.text!.isEmpty){
-            b=(agriculturescore.text! as NSString).intValue
-        }
-        c=a+b
-        agriculturescore.text="\(c)"
-    }
-
-    @IBOutlet weak var oneteach: UILabel!
-    @IBOutlet weak var twoteach: UILabel!
-    @IBOutlet weak var threeteach: UILabel!
-
+    var db:SQLiteDB!
+    
+    @IBOutlet weak var agronomy: UILabel!
+    @IBOutlet weak var teach: UILabel!
+    @IBOutlet weak var agrscore: UITextField!
+    @IBOutlet weak var teascore: UITextField!
+    
+    var a=0
+    var b=0
+    
     @IBAction func addone(sender: AnyObject) {
-        var d:Int32=0
-        var e:Int32=0
-        var f:Int32=0
-        if(!oneteach.text!.isEmpty){
-            d=(oneteach.text! as NSString).intValue
+        if(!agrscore.text!.isEmpty) {
+            a=(agrscore.text! as NSString).integerValue
+            a=a+1
+            agrscore.text=("\(a)")
+        } else {
+            a=a+1
+            agrscore.text=("\(a)")
         }
-        if(!teachscore.text!.isEmpty){
-            e=(teachscore.text! as NSString).intValue
-        }
-        f=d+e
-        teachscore.text="\(f)"
-    }
-    @IBAction func addtwo(sender: AnyObject) {
-        var d:Int32=0
-        var e:Int32=0
-        var f:Int32=0
-        if(!twoteach.text!.isEmpty){
-            d=(twoteach.text! as NSString).intValue
-        }
-        if(!teachscore.text!.isEmpty){
-            e=(teachscore.text! as NSString).intValue
-        }
-        f=d+e
-        teachscore.text="\(f)"
-    }
-
-    @IBAction func addthree(sender: AnyObject) {
-        var d:Int32=0
-        var e:Int32=0
-        var f:Int32=0
-        if(!threeteach.text!.isEmpty){
-            d=(threeteach.text! as NSString).intValue
-        }
-        if(!teachscore.text!.isEmpty){
-            e=(teachscore.text! as NSString).intValue
-        }
-        f=d+e
-        teachscore.text="\(f)"
+        saveUser()
+        
     }
     
-    @IBOutlet weak var agriculturescore: UILabel!
-    var x:Double=0.0;
-    var y:Double=0.0;
-    @IBOutlet weak var teachscore: UILabel!
-    var x1:Double=0.0;
-    var y2:Double=0.0;
+    @IBAction func onesubtract(sender: AnyObject) {
+        
+    }
+    
+    @IBAction func addtwo(sender: AnyObject) {
+        
+    }
+    @IBAction func addthree(sender: AnyObject) {
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    @IBOutlet var txtagrtroop: UITextField!
+    @IBOutlet var txtteachtroops: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        //获取数据库实例
+        db = SQLiteDB.sharedInstance()
+        //如果表还不存在则创建表（其中uid为自增主键）
+        db.execute("create table if not exists t_user(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+        //如果有数据则加载
+        initUser()
     }
+    
+    //点击保存
+    @IBAction func saveClicked(sender: AnyObject) {
+        saveUser()
+    }
+    
+    //从SQLite加载数据
+    func initUser() {
+        let data = db.query("select * from t_user")
+        if data.count > 0 {
+            //获取最后一行数据显示
+            let user = data[data.count - 1]
+             txtagrtroop.text = user["agrtroop"] as? String
+            txtteachtroops.text = user["teachtroops"] as? String
+        }
+    }
+    
+    //保存数据到SQLite
+    func saveUser() {
+        let agrtroop = self.txtagrtroop.text!
+        let teachtroops = self.txtteachtroops.text!
+        //插入数据库，这里用到了esc字符编码函数，其实是调用bridge.m实现的
+        let sql = "insert into t_user(agrtroop,teachtroops) values('\(agrtroop)','\(teachtroops)')"
+        print("sql: \(sql)")
+        //通过封装的方法执行sql
+        let result = db.execute(sql)
+        print(result)
+    }
+    
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
