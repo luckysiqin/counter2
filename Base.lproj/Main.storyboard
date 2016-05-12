@@ -121,6 +121,9 @@
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="+1"/>
+                                <connections>
+                                    <action selector="addone2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JVj-Mi-v6i"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" id="MEi-RV-LJZ">
                                 <rect key="frame" x="10" y="108" width="113" height="30"/>
@@ -181,7 +184,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="-1"/>
                                 <connections>
-                                    <action selector="onesubtract:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JYq-Vr-OZA"/>
+                                    <action selector="onesubtract:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iJ6-WS-I8y"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OUC-HZ-SSg">
@@ -190,6 +193,9 @@
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="-1"/>
+                                <connections>
+                                    <action selector="subtracttwo2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Xq-hh-GpR"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="D8D-So-XZl">
                                 <rect key="frame" x="254" y="340" width="46" height="36"/>
@@ -218,6 +224,15 @@
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="-3"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CYS-hC-UFO">
+                                <rect key="frame" x="25" y="513" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <state key="normal" title="清空"/>
+                                <connections>
+                                    <action selector="clean:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Npa-bU-Nuo"/>
+                                </connections>
                             </button>
                         </subviews>
                         <animations/>

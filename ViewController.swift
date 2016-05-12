@@ -34,17 +34,62 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onesubtract(sender: AnyObject) {
-        
+        if(!agrscore.text!.isEmpty) {
+            a=(agrscore.text! as NSString).integerValue
+            if a>0{
+                a=a-1
+                agrscore.text=("\(a)")
+            }
+            agrscore.text=("\(a)")
+        } else {
+            if a>0{
+                a=a-1
+                agrscore.text=("\(a)")
+            }
+            agrscore.text=("\(a)")
+        }
+        saveUser()
     }
     
     @IBAction func addtwo(sender: AnyObject) {
-        
     }
     @IBAction func addthree(sender: AnyObject) {
-        
     }
     
+    @IBAction func addone2(sender: AnyObject) {
+        if(!teascore.text!.isEmpty) {
+            b=(teascore.text! as NSString).integerValue
+            b=b+1
+            teascore.text=("\(b)")
+        } else {
+            b=b+1
+           teascore.text=("\(b)")
+        }
+        saveUser()
+    }
     
+    @IBAction func subtracttwo2(sender: AnyObject) {
+        if(!teascore.text!.isEmpty) {
+            b=(teascore.text! as NSString).integerValue
+            if b>0{
+                b=b-1
+                teascore.text=("\(b)")
+            }
+            teascore.text=("\(b)")
+        } else {
+            if b>0{
+                b=b-1
+                teascore.text=("\(b)")
+            }
+            teascore.text=("\(b)")
+        }
+        saveUser()
+    }
+    @IBAction func clean(sender: AnyObject) {
+       agrscore.text = "0"
+        teascore.text = "0"
+        saveUser()
+    }
     
     
     
