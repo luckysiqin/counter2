@@ -11,11 +11,15 @@ import UIKit
 class ViewController: UIViewController {
     
     var db:SQLiteDB!
+    var KeepTime:NSTimer!
+    var Timer:Int = 0
     
     @IBOutlet weak var agronomy: UILabel!
     @IBOutlet weak var teach: UILabel!
     @IBOutlet weak var agrscore: UITextField!
     @IBOutlet weak var teascore: UITextField!
+    @IBOutlet weak var Timeone: UILabel!
+    @IBOutlet weak var Timetwo: UILabel!
     
     var a=0
     var b=0
@@ -32,25 +36,7 @@ class ViewController: UIViewController {
         saveUser()
         saveMark()
     }
-    
-    @IBAction func onesubtract(sender: AnyObject) {
-        if(!agrscore.text!.isEmpty) {
-            a=(agrscore.text! as NSString).integerValue
-            if a>0{
-                a=a-1
-                agrscore.text=("\(a)")
-            }
-            agrscore.text=("\(a)")
-        } else {
-            if a>0{
-                a=a-1
-                agrscore.text=("\(a)")
-            }
-            agrscore.text=("\(a)")
-        }
-        saveUser()
-        saveMark()
-    }
+
     
     @IBAction func addtwo(sender: AnyObject) {
         if(!agrscore.text!.isEmpty) {
@@ -137,10 +123,29 @@ class ViewController: UIViewController {
     @IBAction func clean(sender: AnyObject) {
        agrscore.text = "0"
         teascore.text = "0"
+        Timeone.text = "0"
+        Timetwo.text = "0"
+        agronomy.text = "0"
+        teach.text="0"
+        KeepTime.invalidate()
         saveUser()
         saveMark()
     }
+    @IBAction func start(sender: AnyObject) {
+        KeepTime = NSTimer.scheduledTimerWithTimeInterval(1,
+            target:self,selector:Selector("Stop"),
+            userInfo:nil,repeats:true)
+    }
 
+    @IBAction func Stop(sender: AnyObject) {
+        Timer++
+        let sec = Timer%60
+        let min = Timer/60
+        Timeone.text = String(min)
+        Timetwo.text = String(sec)
+        saveUser()
+        saveMark()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,6 +155,7 @@ class ViewController: UIViewController {
         //如果表还不存在则创建表（其中uid为自增主键）
         db.execute("create table if not exists t_user(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
          db.execute("create table if not exists t_mark(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+          db.execute("create table if not exists t_Time(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
         //如果有数据则加载
         initUser()
     }
@@ -178,7 +184,15 @@ class ViewController: UIViewController {
             teascore.text = user["teascore"] as? String
         }
     }
-
+    func initTime() {
+        let data = db.query("select * from t_time")
+        if data.count > 0 {
+            //获取最后一行数据显示
+            let time = data[data.count - 1]
+            Timeone.text = time["min"] as? String
+            Timetwo.text = time["sec"] as? String
+        }
+    }
     //保存数据到SQLite
     func saveUser() {
         let agronomy = self.agronomy.text!
@@ -202,7 +216,16 @@ class ViewController: UIViewController {
         print(result1)
     }
 
-
+    func saveTime() {
+        let Timeone = self.Timeone.text!
+        let Timetwo = self.Timetwo.text!
+        //插入数据库，这里用到了esc字符编码函数，其实是调用bridge.m实现的
+        let sql2 = "insert into t_time(min,sec) values('\(Timeone)','\(Timetwo)')"
+        print("sql2: \(sql2)")
+        //通过封装的方法执行sql
+        let result2 = db.execute(sql2)
+        print(result2)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
