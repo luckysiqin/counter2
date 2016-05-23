@@ -35,6 +35,7 @@ class ViewController: UIViewController {
         }
         saveUser()
         saveMark()
+        saveTime()
     }
 
     
@@ -49,6 +50,7 @@ class ViewController: UIViewController {
         }
         saveUser()
         saveMark()
+        saveTime()
     }
     @IBAction func addthree(sender: AnyObject) {
         if(!agrscore.text!.isEmpty) {
@@ -61,6 +63,7 @@ class ViewController: UIViewController {
         }
         saveUser()
         saveMark()
+        saveTime()
     }
     
     @IBAction func addone2(sender: AnyObject) {
@@ -74,26 +77,9 @@ class ViewController: UIViewController {
         }
         saveUser()
         saveMark()
+        saveTime()
     }
     
-    @IBAction func subtracttwo2(sender: AnyObject) {
-        if(!teascore.text!.isEmpty) {
-            b=(teascore.text! as NSString).integerValue
-            if b>0{
-                b=b-1
-                teascore.text=("\(b)")
-            }
-            teascore.text=("\(b)")
-        } else {
-            if b>0{
-                b=b-1
-                teascore.text=("\(b)")
-            }
-            teascore.text=("\(b)")
-        }
-        saveUser()
-        saveMark()
-    }
     
     @IBAction func addtwo2(sender: AnyObject) {
         if(!teascore.text!.isEmpty) {
@@ -106,7 +92,9 @@ class ViewController: UIViewController {
         }
         saveUser()
         saveMark()
+        saveTime()
     }
+    
     @IBAction func addthree2(sender: AnyObject) {
         if(!teascore.text!.isEmpty) {
             b=(teascore.text! as NSString).integerValue
@@ -118,10 +106,11 @@ class ViewController: UIViewController {
         }
         saveUser()
         saveMark()
+        saveTime()
     }
     
-    @IBAction func clean(sender: AnyObject) {
-       agrscore.text = "0"
+    @IBAction func empty(sender: AnyObject) {
+        agrscore.text = "0"
         teascore.text = "0"
         Timeone.text = "0"
         Timetwo.text = "0"
@@ -131,13 +120,13 @@ class ViewController: UIViewController {
         saveUser()
         saveMark()
     }
+
     @IBAction func start(sender: AnyObject) {
-        KeepTime = NSTimer.scheduledTimerWithTimeInterval(1,
-            target:self,selector:Selector("Stop"),
+        KeepTime = NSTimer.scheduledTimerWithTimeInterval(1,target:self,selector:Selector("tickDown"),
             userInfo:nil,repeats:true)
     }
-
-    @IBAction func Stop(sender: AnyObject) {
+    func tickDown()
+    {
         Timer++
         let sec = Timer%60
         let min = Timer/60
@@ -145,6 +134,14 @@ class ViewController: UIViewController {
         Timetwo.text = String(sec)
         saveUser()
         saveMark()
+        saveTime()
+    }
+    
+    @IBAction func Stop(sender: AnyObject) {
+        KeepTime.invalidate()
+        saveUser()
+        saveMark()
+        saveTime()
     }
     
     override func viewDidLoad() {
@@ -154,15 +151,12 @@ class ViewController: UIViewController {
         db = SQLiteDB.sharedInstance()
         //如果表还不存在则创建表（其中uid为自增主键）
         db.execute("create table if not exists t_user(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
-         db.execute("create table if not exists t_mark(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
-          db.execute("create table if not exists t_Time(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
-        //如果有数据则加载
         initUser()
-    }
-    
-    //点击保存
-    @IBAction func saveClicked(sender: AnyObject) {
-        saveUser()
+         db.execute("create table if not exists t_mark(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+        initMark()
+          db.execute("create table if not exists t_Time(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+        initTime()
+         //如果有数据则加载
     }
     
     //从SQLite加载数据
@@ -176,12 +170,12 @@ class ViewController: UIViewController {
         }
     }
     func initMark() {
-        let data = db.query("select * from t_user")
+        let data = db.query("select * from t_mark")
         if data.count > 0 {
             //获取最后一行数据显示
-            let user = data[data.count - 1]
-            agrscore.text = user["agrscore"] as? String
-            teascore.text = user["teascore"] as? String
+            let mark = data[data.count - 1]
+            agrscore.text = mark["agrscore"] as? String
+            teascore.text = mark["teascore"] as? String
         }
     }
     func initTime() {
