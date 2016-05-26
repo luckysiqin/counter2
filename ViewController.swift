@@ -114,8 +114,6 @@ class ViewController: UIViewController {
         teascore.text = "0"
         Timeone.text = "0"
         Timetwo.text = "0"
-        agronomy.text = "0"
-        teach.text="0"
         KeepTime.invalidate()
         saveUser()
         saveMark()
@@ -155,7 +153,7 @@ class ViewController: UIViewController {
          db.execute("create table if not exists t_mark(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
         initMark()
           db.execute("create table if not exists t_Time(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
-        initTime()
+        initTime() 
          //如果有数据则加载
     }
     
