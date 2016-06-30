@@ -148,11 +148,11 @@ class ViewController: UIViewController {
         //获取数据库实例
         db = SQLiteDB.sharedInstance()
         //如果表还不存在则创建表（其中uid为自增主键）
-        db.execute("create table if not exists t_user(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+        db.execute("create table if not exists t_user(uid integer primary key,agronomy varchar(20),teach varchar(20))")
         initUser()
-         db.execute("create table if not exists t_mark(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+         db.execute("create table if not exists t_mark(uid integer primary key,agrscore varchar(20),teascore varchar(20))")
         initMark()
-          db.execute("create table if not exists t_Time(uid integer primary key,txtagrtroop varchar(20),txtteachtroops varchar(20))")
+          db.execute("create table if not exists t_Time(uid integer primary key,min varchar(20),sec varchar(20))")
         initTime() 
          //如果有数据则加载
     }
